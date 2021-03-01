@@ -667,6 +667,8 @@ function handleHubChannelJoined(entryManager, hubChannel, messageDispatch, data)
 
           return;
         });
+        console.log();
+        injectScripts("loadEnvironmentAndConnect" );
     };
 
     window.APP.hub = hub;
@@ -683,6 +685,41 @@ function handleHubChannelJoined(entryManager, hubChannel, messageDispatch, data)
           loadEnvironmentAndConnect();
         }
       });
+    }
+    function injectScripts()
+    {                          
+          //get the current hub_id and construct a url
+          const myHub = hub.hub_id;
+          const url = `${process.env.INJECTION_URL}/hubs/${myHub}`;
+        console.log("INJECT");
+        console.log(url);
+        //fetch the url with a get method which will return scripts to inject
+        fetch(url, { method: 'get'}).then(function(body) 
+        {
+            return body.text(); 
+        })
+        .then(function(data) 
+        { 
+            let urls = JSON.parse(data);
+            let i=0;
+            let script;
+            let src;
+            let body = document.querySelector("body");
+            console.log(urls.length);
+            for(i=0; i<urls.length; ++i)
+            {
+                console.log("injecting "+urls[i].url)
+                if (urls[i].url)
+                {
+                    script = document.createElement("script");
+                    script.type = 'text/javascript';
+                    src = document.createAttribute('src');
+                    src.value = urls[i].url;
+                    script.setAttributeNode(src);
+                    body.appendChild(script);
+                }
+            }       
+        });
     }
   };
 

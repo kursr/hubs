@@ -590,7 +590,8 @@ module.exports = async (env, argv) => {
           SENTRY_DSN: process.env.SENTRY_DSN,
           GA_TRACKING_ID: process.env.GA_TRACKING_ID,
           POSTGREST_SERVER: process.env.POSTGREST_SERVER,
-          APP_CONFIG: appConfig
+          APP_CONFIG: appConfig,
+          INJECTION_URL: process.env.INJECTION_URL
         })
       })
     ]
